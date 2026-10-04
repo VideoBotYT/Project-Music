@@ -1,0 +1,13 @@
+<vbox style="padding: 5px;" height="100%" width="100%">
+    <menubar width="100%">
+        <menu text="Library">
+            <menuitem id="addSong" text="Add Song"/>
+        </menu>
+    </menubar>
+
+    <scrollView width="100%" height="100%">
+        <grid id="libraryGrid" width="100%" height="100%" columns="4">
+
+        </grid>
+    </scrollView>
+</vbox>
