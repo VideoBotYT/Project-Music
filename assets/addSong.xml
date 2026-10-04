@@ -1,0 +1,6 @@
+<dialog title="Add Song">
+    <hbox>
+        <label text="Name:"/>
+        <textfield placeholder="Example Song" id="songName"/>
+    </hbox>
+</dialog>

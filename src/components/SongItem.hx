@@ -14,5 +14,9 @@ class SongItem extends Button{
 
     public function new(){
         super();
+
+        onClick = function(event){
+            trace(song);
+        }
     }
 }

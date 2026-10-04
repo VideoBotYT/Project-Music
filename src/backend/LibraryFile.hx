@@ -1,8 +1,6 @@
 package backend;
 
 import haxe.Json;
-import sys.io.File;
-import sys.FileSystem;
 
 typedef Library = {
     var song_library:Array<Song>;
@@ -19,13 +17,17 @@ typedef Playlist = {
 }
 
 class LibraryFile{
-    var libDir:String = "library";
+    public static var libDir:String = "library";
+    public static var libFile:String = "library.json";
+    public static var library:Library;
 
     public static function loadLibrary():Library{
         var rawFile:String = null;
 
-        if (FileSystem.exists('$libDir/library.json'))
-            rawFile = getContent('$libDir/library.json');
+		if (FileSystem.exists('$libDir/$libFile'))
+			rawFile = getContent('$libDir/$libFile');
+        else
+            return null;
 
         return parseJson(rawFile);
     }
@@ -43,6 +45,12 @@ class LibraryFile{
         }
 
         return playlists;
+    }
+
+    public static function addToLibrary(content:Song){
+		library?.song_library?.push(content);
+
+		File.saveContent('$libDir/$libFile', Json.stringify(library));
     }
 
     public static function parseJson(text:String):Dynamic{
