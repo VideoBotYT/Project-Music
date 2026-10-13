@@ -23,9 +23,46 @@ class MainView extends VBox {
                     var song:Song = {
                         name: dialog.songName.text
                     };
+                    Dialogs.openBinaryFile("Load Song", [{label: "Audio File", extension: "ogg"}], function(selectedFile){
+                        if (selectedFile != null && selectedFile.bytes != null){
+                            trace("Selected Song File: "+selectedFile.name);
+							if (!FileSystem.exists('${LibraryFile.songDir}'))
+								FileSystem.createDirectory('${LibraryFile.songDir}');
+							File.saveBytes('${LibraryFile.songDir}/${song.name}.ogg', selectedFile.bytes);
+                        }
+                    });
 					LibraryFile.addToLibrary(song);
+
+					libraryGrid.removeAllComponents();
+					setupSongs();
                 }
             }
+        }
+
+        removeSong.onClick = function(event){
+            var dialog = new RemoveSongDialog();
+            dialog.showDialog();
+            dialog.onDialogClosed = function(e){
+                if (e.button == DialogButton.APPLY){
+					for (i => songName in dialog.songsToRemove){
+                        LibraryFile.removeSongByName(songName);
+                        LibraryFile.saveLibraryFile();
+                        FileSystem.deleteFile('${LibraryFile.songDir}/$songName.ogg');
+                    }
+					libraryGrid.removeAllComponents();
+                    setupSongs();
+                }
+            }
+        }
+
+		setupSongs();
+    }
+
+    function setupSongs(){
+        for (i => song in LibraryFile.library.song_library){
+            var songItem = new SongItem(song.name);
+            songItem.id = song.name;
+			libraryGrid.addComponent(songItem);
         }
     }
 }

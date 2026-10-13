@@ -8,7 +8,6 @@ typedef Library = {
 
 typedef Song = {
     var name:String;
-    @:optional var cover:String;
 }
 
 typedef Playlist = {
@@ -19,7 +18,11 @@ typedef Playlist = {
 class LibraryFile{
     public static var libDir:String = "library";
     public static var libFile:String = "library.json";
+
+    public static var songDir:String = '${libDir}/songs';
+
     public static var library:Library;
+    public static var playlists:Array<Playlist> = [];
 
     public static function loadLibrary():Library{
         var rawFile:String = null;
@@ -49,12 +52,23 @@ class LibraryFile{
 
     public static function addToLibrary(content:Song){
 		library?.song_library?.push(content);
+        saveLibraryFile();
+    }
 
+    public static function saveLibraryFile(){
 		File.saveContent('$libDir/$libFile', Json.stringify(library));
     }
 
     public static function parseJson(text:String):Dynamic{
         return cast Json.parse(text);
+    }
+
+    public static function removeSongByName(name:String){
+		for (s in library.song_library){
+            if (s.name == name){
+                library.song_library.remove(s); break;
+            }
+        }
     }
 
     static function getContent(file:String):String{

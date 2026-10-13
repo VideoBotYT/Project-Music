@@ -26,6 +26,7 @@ class Main {
             }
 
 			LibraryFile.library = LibraryFile.loadLibrary();
+            LibraryFile.playlists = LibraryFile.loadPlaylists();
             
             app.addComponent(new MainView());
 
