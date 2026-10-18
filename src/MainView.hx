@@ -21,20 +21,21 @@ class MainView extends VBox {
 			dialog.onDialogClosed = function(e) {
                 if (e.button == DialogButton.SAVE){
                     var song:Song = {
-                        name: dialog.songName.text
+                        name: dialog.songName.text,
+                        files: dialog.files
                     };
-                    Dialogs.openBinaryFile("Load Song", [{label: "Audio File", extension: "ogg"}], function(selectedFile){
-                        if (selectedFile != null && selectedFile.bytes != null){
-                            trace("Selected Song File: "+selectedFile.name);
-							if (!FileSystem.exists('${LibraryFile.songDir}'))
-								FileSystem.createDirectory('${LibraryFile.songDir}');
-							File.saveBytes('${LibraryFile.songDir}/${song.name}.ogg', selectedFile.bytes);
-                        }
-                    });
+                    
 					LibraryFile.addToLibrary(song);
 
 					libraryGrid.removeAllComponents();
 					setupSongs();
+                }
+                if (e.button == DialogButton.CANCEL){
+                    var path = '${LibraryFile.songDir}/${dialog.songName.text}';
+					for (i => file in FileSystem.readDirectory(path))
+						FileSystem.deleteFile('$path/$file');
+
+					FileSystem.deleteDirectory(path);
                 }
             }
         }
@@ -45,9 +46,18 @@ class MainView extends VBox {
             dialog.onDialogClosed = function(e){
                 if (e.button == DialogButton.APPLY){
 					for (i => songName in dialog.songsToRemove){
-                        LibraryFile.removeSongByName(songName);
-                        LibraryFile.saveLibraryFile();
-                        FileSystem.deleteFile('${LibraryFile.songDir}/$songName.ogg');
+                        var path = '${LibraryFile.songDir}/${songName}';
+
+						if (!FileSystem.exists(path))
+							continue;
+
+						for (i => file in FileSystem.readDirectory(path))
+                            FileSystem.deleteFile('$path/$file');
+
+						FileSystem.deleteDirectory(path);
+
+						LibraryFile.removeSongByName(songName);
+						LibraryFile.saveLibraryFile();
                     }
 					libraryGrid.removeAllComponents();
                     setupSongs();

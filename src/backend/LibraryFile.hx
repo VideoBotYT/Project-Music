@@ -8,6 +8,7 @@ typedef Library = {
 
 typedef Song = {
     var name:String;
+    var files:Array<String>;
 }
 
 typedef Playlist = {

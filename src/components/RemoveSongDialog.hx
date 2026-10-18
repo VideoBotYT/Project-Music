@@ -10,8 +10,6 @@ class RemoveSongDialog extends Dialog{
         super();
 
 		for (i => song in LibraryFile.library.song_library) {
-            if (!FileSystem.exists('${LibraryFile.songDir}/${song.name}.ogg')) continue;
-
             var songCheck = new CheckBox();
             songCheck.text = song.name;
 
