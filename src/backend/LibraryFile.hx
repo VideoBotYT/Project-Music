@@ -64,6 +64,16 @@ class LibraryFile{
         return cast Json.parse(text);
     }
 
+	public static function findSongByName(name:String, ?libraryTemp:Library):Song{
+        trace(libraryTemp);
+        if (libraryTemp == null) libraryTemp = library;
+		for (s in libraryTemp.song_library){
+            if (s.name == name)
+                return s;
+        }
+        return null;
+    }
+
     public static function removeSongByName(name:String){
 		for (s in library.song_library){
             if (s.name == name){

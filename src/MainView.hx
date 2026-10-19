@@ -65,6 +65,14 @@ class MainView extends VBox {
             }
         }
 
+        /* editSong.onClick = function(event){
+            var dialog = new EditSongDialog();
+            dialog.showDialog();
+            dialog.onDialogClosed = function(e){
+				dialog.sidebar.hide();
+            }
+        } */
+
 		setupSongs();
     }
 
